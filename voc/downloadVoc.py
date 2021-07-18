@@ -40,7 +40,7 @@ url = 'https://github.com/ultralytics/yolov5/releases/download/v1.0/'
 urls = [url + 'VOCtrainval_06-Nov-2007.zip',  # 446MB, 5012 images
         url + 'VOCtest_06-Nov-2007.zip',  # 438MB, 4953 images
         url + 'VOCtrainval_11-May-2012.zip']  # 1.95GB, 17126 images
-download(urls, dir=dir / 'images', delete=False)
+#download(urls, dir=dir / 'images', delete=False)
 
 # Convert
 path = dir / f'images/VOCdevkit'
