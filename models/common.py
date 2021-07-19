@@ -442,7 +442,7 @@ class SENetBottleneck(nn.Module):
 
 
 # 新的C3模块，使用带有SENet的Bottleneck模块
-class C3(nn.Module):
+class SEnetC3(nn.Module):
     # CSP Bottleneck with 3 convolutions
     def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
         super(C3, self).__init__()
