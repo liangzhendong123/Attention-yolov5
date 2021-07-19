@@ -427,7 +427,7 @@ class SELayer(nn.Module):
 class SENetBottleneck(nn.Module):
     # Standard bottleneck
     def __init__(self, c1, c2, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, shortcut, groups, expansion
-        super(Bottleneck, self).__init__()
+        super(SENetBottleneck, self).__init__()
         c_ = int(c2 * e)  # hidden channels
         self.cv1 = Conv(c1, c_, 1, 1)
         self.cv2 = Conv(c_, c2, 3, 1, g=g)
@@ -437,7 +437,7 @@ class SENetBottleneck(nn.Module):
         self.senet = SELayer(c1, 16)
 
     def forward(self, x):
-        return x + slef.senet(self.cv2(self.cv1(x)) if self.add else self.cv2(self.cv1(x)))
+        return x + self.senet(self.cv2(self.cv1(x)) if self.add else self.cv2(self.cv1(x)))
         #return x + self.cv2(self.cv1(x)) if self.add else self.cv2(self.cv1(x))
 
 
@@ -445,7 +445,7 @@ class SENetBottleneck(nn.Module):
 class SENetC3(nn.Module):
     # CSP Bottleneck with 3 convolutions
     def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
-        super(C3, self).__init__()
+        super(SENetC3, self).__init__()
         c_ = int(c2 * e)  # hidden channels
         self.cv1 = Conv(c1, c_, 1, 1)
         self.cv2 = Conv(c1, c_, 1, 1)
