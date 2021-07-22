@@ -91,6 +91,8 @@ class TransformerBlock(nn.Module):
         return x
 
 
+"""
+采用下面的加入了SEnet的残差结构
 class Bottleneck(nn.Module):
     # Standard bottleneck
     def __init__(self, c1, c2, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, shortcut, groups, expansion
@@ -102,6 +104,7 @@ class Bottleneck(nn.Module):
 
     def forward(self, x):
         return x + self.cv2(self.cv1(x)) if self.add else self.cv2(self.cv1(x))
+"""
 
 
 class BottleneckCSP(nn.Module):
@@ -122,7 +125,8 @@ class BottleneckCSP(nn.Module):
         y2 = self.cv2(x)
         return self.cv4(self.act(self.bn(torch.cat((y1, y2), dim=1))))
 
-
+"""
+采用使用加入了SEnet结构的残差结构
 class C3(nn.Module):
     # CSP Bottleneck with 3 convolutions
     def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
@@ -136,7 +140,7 @@ class C3(nn.Module):
 
     def forward(self, x):
         return self.cv3(torch.cat((self.m(self.cv1(x)), self.cv2(x)), dim=1))
-
+"""
 
 class C3TR(C3):
     # C3 module with TransformerBlock()
@@ -424,7 +428,7 @@ class SELayer(nn.Module):
         return x * y
  
 # 使用SENet模块的残差机制
-class SENetBottleneck(nn.Module):
+class Bottleneck(nn.Module):
     # Standard bottleneck
     def __init__(self, c1, c2, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, shortcut, groups, expansion
         super(SENetBottleneck, self).__init__()
@@ -442,7 +446,7 @@ class SENetBottleneck(nn.Module):
 
 
 # 新的C3模块，使用带有SENet的Bottleneck模块
-class SENetC3(nn.Module):
+class tC3(nn.Module):
     # CSP Bottleneck with 3 convolutions
     def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
         super(SENetC3, self).__init__()
@@ -450,7 +454,7 @@ class SENetC3(nn.Module):
         self.cv1 = Conv(c1, c_, 1, 1)
         self.cv2 = Conv(c1, c_, 1, 1)
         self.cv3 = Conv(2 * c_, c2, 1)  # act=FReLU(c2)
-        self.m = nn.Sequential(*[SENetBottleneck(c_, c_, shortcut, g, e=1.0) for _ in range(n)])
+        self.m = nn.Sequential(*[Bottleneck(c_, c_, shortcut, g, e=1.0) for _ in range(n)])
         # self.m = nn.Sequential(*[CrossConv(c_, c_, 3, 1, g, 1.0, shortcut) for _ in range(n)])
 
     def forward(self, x):
